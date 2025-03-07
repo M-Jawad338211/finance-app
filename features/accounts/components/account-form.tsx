@@ -9,6 +9,7 @@ import { insertAccountSchema } from "@/db/schema";
 import {
     Form,
     FormControl,
+    FormField,
     FormItem,
     FormLabel,
     FormMessage,
@@ -41,7 +42,7 @@ export const AccountForm = ({
     });
 
     const handleSubmit = (values: FormValues) => {
-        console.log ({ values });
+        onSubmit(values);
     };
 
     const handleDelete = () => {
@@ -51,7 +52,39 @@ export const AccountForm = ({
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-4 pt-4">
-
+                <FormField
+                    name="name"
+                    control={form.control}
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>
+                                Name
+                            </FormLabel>
+                            <FormControl>
+                                <Input
+                                disabled={disabled}
+                                placeholder="e.g. Cash, Bank, Credit Card"
+                                {...field}
+                                />
+                            </FormControl>
+                        </FormItem>
+                    )}
+                />
+                <Button className="w-full" disabled={disabled}>
+                    {id ? "save changes" : "create account"}
+                </Button>
+                {!!id && (
+                    <Button
+                        type="button"
+                        disabled={disabled}
+                        onClick={handleDelete}
+                        className="w-full"
+                        variant="outline"
+                    >
+                        <Trash className="size-4 mr-2" />
+                        Delete account
+                    </Button>
+                )}
             </form>
         </Form>
     )
