@@ -25,7 +25,9 @@ const mutation = useMutation<
         queryClient.invalidateQueries({ queryKey: ["accounts"]})
     },
     onError: () => {
-
+        toast.error('Failed to create account');
     }
-})
+});
+
+    return mutation;
 }
