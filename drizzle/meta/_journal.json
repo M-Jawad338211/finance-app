@@ -15,6 +15,13 @@
       "when": 1741245486556,
       "tag": "0001_easy_beast",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1741771893999,
+      "tag": "0002_high_maria_hill",
+      "breakpoints": true
     }
   ]
 }
