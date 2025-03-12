@@ -9,7 +9,7 @@ import {
 import { AccountForm } from "./account-form";
 import { insertAccountSchema } from "@/db/schema";
 import { z } from "zod";
-import { useCreateAccount } from "../api/use-create-accout";
+import { useCreateAccount } from "../api/use-create-account";
 
 const formSchema = insertAccountSchema.pick({
     name: true,
