@@ -5,7 +5,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { insertAccountSchema, insertTransactionSchema } from "@/db/schema";
+import { insertTransactionSchema } from "@/db/schema";
 import {
     Form,
     FormControl,
@@ -18,6 +18,7 @@ import { Select } from "@/components/select";
 import { DatePicker } from "@/components/date-picker";
 import { Textarea } from "@/components/ui/textarea";
 import { AmountInput } from "@/components/amount-input";
+import { convertAmountToMiliunits } from "@/lib/utils";
 
 const formSchema = z.object({
     date: z.coerce.date(),
@@ -60,12 +61,23 @@ export const TransactionForm = ({
 }: Props) => {
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
-        defaultValues: defaultValues,
+        defaultValues: defaultValues || {
+            date: new Date(),
+            accountId: "",
+            categoryId: null,
+            payee: "",
+            amount: "",
+            notes: ""
+        }
     });
 
     const handleSubmit = (values: FormValues) => {
-        console.log({ values });
-        // onSubmit(values);
+       const amount = parseFloat(values.amount);
+       const amountInMiliunits = convertAmountToMiliunits(amount);
+        onSubmit({
+            ...values,
+            amount: amountInMiliunits,
+        });
     };
 
     const handleDelete = () => {
@@ -192,7 +204,7 @@ export const TransactionForm = ({
                     )}
                 />
                 <Button className="w-full" disabled={disabled}>
-                    {id ? "save changes" : "create an account"}
+                    {id ? "save changes" : "create transaction"}
                 </Button>
                 {!!id && (
                     <Button
@@ -203,7 +215,7 @@ export const TransactionForm = ({
                         variant="outline"
                     >
                         <Trash className="size-4 mr-2" />
-                        Delete account
+                        Delete transaction
                     </Button>
                 )}
             </form>
