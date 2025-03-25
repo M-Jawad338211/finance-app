@@ -10,6 +10,7 @@ import { Actions } from "./actions";
 import { format } from "date-fns";
 import { formatCurrency } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { AccountColumn } from "./account-column";
 
 export type ResponseType = InferResponseType<typeof client.api.transactions.$get, 200>["data"][0];
 
@@ -122,6 +123,29 @@ export const columns: ColumnDef<ResponseType>[] = [
         >
           {formatCurrency(amount)}
         </Badge>
+      )
+    }
+  },
+
+  {
+    accessorKey: "account",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Account
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      return (
+       <AccountColumn
+        account={row.original.account}
+        accountId={row.original.accountId}
+       />
       )
     }
   },
