@@ -108,8 +108,7 @@ const TransactionsPage = () => {
                  disabled={isDisabled}
                  />
                </CardContent>
-            </Card>
-            
+            </Card>           
         </div>
     )
 }
