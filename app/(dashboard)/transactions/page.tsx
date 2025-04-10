@@ -1,5 +1,6 @@
 'use client';
 import { Button } from "@/components/ui/button";
+import {transactions as transactionSchema} from "@/db/schema";
 import {
     Card,
     CardContent,
@@ -53,6 +54,10 @@ const TransactionsPage = () => {
     transactionsQuery.isLoading ||
     deleteTransactions.isPending;
 
+    const onSubmitImport = async (
+      values: typeof transactionSchema.$inferInsert[],
+    ) => {};
+
     if (transactionsQuery.isLoading) {
       return (
         <div className="max-w-screen-xl mx-auto w-full pb-10 -mt-24">
@@ -76,7 +81,7 @@ const TransactionsPage = () => {
           <ImportCard
             data={importResults.data}
             onCancel={onCancelImport}
-            onSubmit={() => {}}
+            onSubmit={onSubmitImport}
           />
         </>
       )
