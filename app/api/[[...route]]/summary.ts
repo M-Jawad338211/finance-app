@@ -6,6 +6,7 @@ import { and, eq, gte, lte, sql, sum } from "drizzle-orm";
 import { Hono } from "hono";
 import {z} from "zod";
 import { accounts, transactions } from "@/db/schema";
+import { calculatePercentageChange } from "@/lib/utils";
 
 const app = new Hono()
     .get(
@@ -83,9 +84,26 @@ const app = new Hono()
                 startDate,
                 endDate,
             );
+
+            const incomeChange = calculatePercentageChange(
+                currentPeriod.income,
+                lastPeriod.income,
+            );
+            const expensesChange = calculatePercentageChange(
+                currentPeriod.expenses,
+                lastPeriod.expenses,
+            );
+
+            const remainingChange = calculatePercentageChange(
+                currentPeriod.remaining,
+                lastPeriod.remaining,
+            );
             return c.json({
                 currentPeriod,
-                lastPeriod
+                lastPeriod,
+                incomeChange,
+                expensesChange,
+                remainingChange
             })
         },
     );
