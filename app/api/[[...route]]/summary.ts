@@ -133,26 +133,52 @@ const app = new Hono()
                     sql`SUM(ABS(${transactions.amount}))`
                   ));
 
-                  const topCategories = category.slice(0, 3);
-                  const otherCategories = category.slice(3);
-                  const otherSum = otherCategories
-                    .reduce((sum, current) => sum + current.value, 0);
-                
-                const finalCategories = topCategories;
-                if (otherCategories.length > 0) {
-                    finalCategories.push({
-                        name: "Other",
-                        value: otherSum,
-                    });
-                }
+            const topCategories = category.slice(0, 3);
+            const otherCategories = category.slice(3);
+            const otherSum = otherCategories
+            .reduce((sum, current) => sum + current.value, 0);
+            
+            const finalCategories = topCategories;
+            if (otherCategories.length > 0) {
+                finalCategories.push({
+                    name: "Other",
+                    value: otherSum,
+                });
+            }
+            const activeDays = await db
+                .select({
+                    date: transactions.date,
+                    income: sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(Number),
+                    expenses: sql`SUM(CASE WHEN ${transactions.amount} < 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(Number),
+                })
+                .from(transactions)
+                .innerJoin(
+                    accounts,
+                    eq(
+                        transactions.accountId,
+                        accounts.id,
+                    ),
+                )
+                .where(
+                    and(
+                      accountId ? eq(transactions.accountId, accountId) : undefined,
+                      eq(accounts.userId, auth.userId),
+                      gte(transactions.date, startDate),
+                      lte(transactions.date, endDate),
+                    )
+                  )
+                  .groupBy(transactions.date)
+                  .orderBy(transactions.date);
+
             return c.json({
                 currentPeriod,
                 lastPeriod,
                 incomeChange,
                 expensesChange,
-                remainingChange
+                remainingChange,
+                finalCategories,
+                activeDays
             })
         },
     );
-
     export default app;
