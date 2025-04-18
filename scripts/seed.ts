@@ -27,3 +27,16 @@ const defaultTo = new Date();
 const defaultFrom = subDays(defaultTo, 90);
 
 const SEED_TRANSACTIONS: typeof transactions.$inferSelect[] = [];
+
+import { eachDayOfInterval, format } from "date-fns";
+import { convertAmountToMiliunits } from "@/lib/utils";
+
+const generateRandomAmount = (category: typeof categories.$inferInsert)
+=> {
+    switch (category.name) {
+        case "Rent":
+            return Math.random() * 400 + 90;
+        case "Utilities":
+            return Math.random() * 200 + 50;
+    }
+}
