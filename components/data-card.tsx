@@ -1,6 +1,6 @@
 import { IconType } from "react-icons";
 import { VariantProps, cva } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import { cn, formatCurrency, formatPercentage } from "@/lib/utils";
 import { 
     Card,
     CardDescription,
@@ -78,6 +78,21 @@ export const DataCard = ({
                   <Icon className={cn(iconVariant({ variant }))}  /> 
                 </div>
             </CardHeader>
+            <CardContent>
+                <h1 className="font-bold text-2xl mb-2 line-clamp-1 break-all">
+                    <CountUp
+                        preserveValue
+                        start={0}
+                        end={value}
+                        decimals={2}
+                        decimalPlaces={2}
+                        formattingFn={formatCurrency}
+                    />
+                </h1>
+                <p>
+                    {formatPercentage(percentageChange)} from last period
+                </p>
+            </CardContent>
         </Card>
     )
 }
