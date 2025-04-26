@@ -24,7 +24,8 @@ const mutation = useMutation<
     },
     onSuccess: () => {
         toast.success('categories deleted')
-        queryClient.invalidateQueries({ queryKey: ["categories"]})
+        queryClient.invalidateQueries({ queryKey: ["categories"]});
+        queryClient.invalidateQueries({ queryKey: ["summary"]})
     },
     onError: () => {
         toast.error('Failed to delete category');

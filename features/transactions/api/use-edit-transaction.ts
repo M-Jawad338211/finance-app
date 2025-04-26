@@ -26,7 +26,8 @@ const mutation = useMutation<
     onSuccess: () => {
         toast.success('Transaction updated')
         queryClient.invalidateQueries({ queryKey: ["transaction", {id}] });
-        queryClient.invalidateQueries({ queryKey: ["transactions"]})
+        queryClient.invalidateQueries({ queryKey: ["transactions"]});
+        queryClient.invalidateQueries({ queryKey: ["summary"]})
     },
     onError: () => {
         toast.error('Failed to edit transaction');

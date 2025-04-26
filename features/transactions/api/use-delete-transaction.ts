@@ -23,7 +23,8 @@ const mutation = useMutation<
     onSuccess: () => {
         toast.success('Transaction deleted')
         queryClient.invalidateQueries({ queryKey: ["transaction", {id}] });
-        queryClient.invalidateQueries({ queryKey: ["transactions"]})
+        queryClient.invalidateQueries({ queryKey: ["transactions"]});
+        queryClient.invalidateQueries({ queryKey: ["summary"]});
     },
     onError: () => {
         toast.error('Failed to delete transaction');
